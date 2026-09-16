@@ -443,7 +443,7 @@ python -m pip install -e ".[dev]"
 
 | Command | |
 |---|---|
-| `pytest tests/` | The suite — **1 530 tests** |
+| `pytest tests/` | The suite — **1 531 tests** |
 | `pytest tests/ --cov` | With coverage |
 | `ruff check src tests` | Lint, including import order |
 | `ruff format src tests` | Format |

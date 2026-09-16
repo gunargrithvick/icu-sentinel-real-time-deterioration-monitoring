@@ -417,7 +417,9 @@ def test_two_runs_on_one_table_agree(config: Settings, frame: pd.DataFrame) -> N
     """Same data, same seed, same numbers - or the card describes an unrepeatable run."""
     first = run(config, frame)
     second = run(config, frame)
-    assert first.report.as_dict() == second.report.as_dict()
+    # ``NaN`` is the correct value for an undefined one-vs-rest metric, but
+    # two NaN floats are not equal under ordinary dictionary comparison.
+    np.testing.assert_equal(first.report.as_dict(), second.report.as_dict())
     assert first.winner == second.winner
 
 

@@ -184,7 +184,8 @@ def test_liveness_names_the_build(client: TestClient) -> None:
     assert body["status"] == "ok"
     assert body["version"] == __version__
     assert body["app"] and body["environment"]
-    assert datetime.fromisoformat(body["at"]).tzinfo is not None
+    # Python 3.10 does not yet accept the RFC 3339 ``Z`` suffix directly.
+    assert datetime.fromisoformat(body["at"].replace("Z", "+00:00")).tzinfo is not None
 
 
 def test_readiness_reports_every_component(client: TestClient) -> None:
