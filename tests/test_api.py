@@ -358,7 +358,7 @@ def test_the_app_exposes_distinct_probe_and_operational_tiers(client: TestClient
     checks only the stable route contract, rather than FastAPI's private dependency graph,
     whose representation differs across the supported dependency versions.
     """
-    paths = {getattr(route, "path", "") for route in create_app().routes}
+    paths = {str(getattr(route, "path", "")).strip() for route in create_app().routes}
     public = {"/", "/health", "/ready", "/metrics", "/docs", "/redoc", "/openapi.json"}
 
     assert {"/", "/health", "/ready", "/metrics"} <= paths

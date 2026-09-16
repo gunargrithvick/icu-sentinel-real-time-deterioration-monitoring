@@ -17,6 +17,20 @@ Try the deployed FastAPI service: [ICU Patient Risk Monitoring System API](https
 
 The public health, readiness, metrics, and interactive documentation probes are available without credentials. The operational `/api/v1` routes require the deployment's private `X-API-Key`; it is intentionally not published in this repository. The production deployment uses the connected Neon PostgreSQL database and synthetic ward data, so it is suitable for evaluation—not clinical use.
 
+## Screenshots
+
+These captures show the current Streamlit dashboard in reproducible local simulator mode (`ICU_FRAME_SOURCE=off`, `ICU_DETECTOR=off`). They use synthetic ward data and are provided for evaluation only.
+
+### Ward overview
+
+![ICU Sentinel ward overview](docs/screenshots/icu-dashboard-overview.png)
+
+### Settings and readiness
+
+![ICU Sentinel settings and readiness](docs/screenshots/icu-dashboard-settings.png)
+
+The screenshots are documentation images of the dashboard. The deployed [Vercel API](https://icu-patient-risk-monitoring-system.vercel.app/) is the public hosted service; run the Streamlit dashboard locally, with Docker, or through Streamlit Community Cloud as described in [Quickstart](#quickstart).
+
 ## What it does
 
 Three independent channels look at each bed, and one fusion layer combines them into a 0–100 composite score and a risk band:
