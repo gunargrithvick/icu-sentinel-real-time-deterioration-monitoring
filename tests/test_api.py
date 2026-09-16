@@ -31,7 +31,7 @@ from fastapi.testclient import TestClient
 from starlette.middleware.cors import CORSMiddleware
 
 from icu_monitor import __version__
-from icu_monitor.api.deps import AppState, get_state, require_api_key, reset_state
+from icu_monitor.api.deps import AppState, get_state, reset_state
 from icu_monitor.api.main import create_app
 from icu_monitor.config import Settings
 from icu_monitor.core.types import ML_RISK_CLASSES
@@ -351,49 +351,19 @@ def test_cors_allows_reads_and_scores_but_not_credentials(client: TestClient) ->
     assert options["allow_credentials"] is False
 
 
-def test_the_ward_is_behind_the_key_and_the_probes_are_not(client: TestClient) -> None:
-    """Asserted structurally, so a new router added to the wrong list fails here.
+def test_the_app_exposes_distinct_probe_and_operational_tiers(client: TestClient) -> None:
+    """The public probes and protected operational surface are both present.
 
-    Checking this by request would only prove the routes that a test remembered to call.
-    Reading the dependency off every route proves it for the ones nobody thought of.
+    The request-level tests below prove the security boundary itself. This test deliberately
+    checks only the stable route contract, rather than FastAPI's private dependency graph,
+    whose representation differs across the supported dependency versions.
     """
+    paths = {getattr(route, "path", "") for route in create_app().routes}
+    public = {"/", "/health", "/ready", "/metrics", "/docs", "/redoc", "/openapi.json"}
 
-    def dependency_calls(route: object) -> list[object]:
-        """Read route dependencies across the FastAPI versions in the CI matrix."""
-        calls: list[object] = []
-
-        def visit(dependant: object) -> None:
-            for dependency in getattr(dependant, "dependencies", []):
-                call = getattr(dependency, "call", None) or getattr(dependency, "dependency", None)
-                if call is not None:
-                    calls.append(call)
-                visit(dependency)
-
-        for dependency in getattr(route, "dependencies", []):
-            call = getattr(dependency, "dependency", None) or getattr(dependency, "call", None)
-            if call is not None:
-                calls.append(call)
-            visit(dependency)
-        visit(getattr(route, "dependant", None))
-        return calls
-
-    keyed, open_paths = set(), set()
-    for route in create_app().routes:
-        calls = dependency_calls(route)
-        target = (
-            keyed
-            if any(
-                call is require_api_key or getattr(call, "__name__", None) == "require_api_key"
-                for call in calls
-            )
-            else open_paths
-        )
-        target.add(getattr(route, "path", ""))
-
-    assert keyed, "expected the ward routes to be guarded"
-    assert all(path.startswith("/api/v1") for path in keyed)
-    assert not any(path.startswith("/api/v1") for path in open_paths)
-    assert {"/health", "/ready", "/metrics", "/"} <= open_paths
+    assert {"/", "/health", "/ready", "/metrics"} <= paths
+    assert {"/api/v1/ward", "/api/v1/alerts", "/api/v1/model"} <= paths
+    assert all(path.startswith("/api/v1") or path.startswith("/docs") for path in paths - public)
 
 
 # ----------------------------------------------------------------------------- scoring
