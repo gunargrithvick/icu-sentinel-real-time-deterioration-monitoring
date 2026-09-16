@@ -357,16 +357,37 @@ def test_the_ward_is_behind_the_key_and_the_probes_are_not(client: TestClient) -
     Checking this by request would only prove the routes that a test remembered to call.
     Reading the dependency off every route proves it for the ones nobody thought of.
     """
+
+    def dependency_calls(route: object) -> list[object]:
+        """Read route dependencies across the FastAPI versions in the CI matrix."""
+        calls: list[object] = []
+
+        def visit(dependant: object) -> None:
+            for dependency in getattr(dependant, "dependencies", []):
+                call = getattr(dependency, "call", None) or getattr(dependency, "dependency", None)
+                if call is not None:
+                    calls.append(call)
+                visit(dependency)
+
+        for dependency in getattr(route, "dependencies", []):
+            call = getattr(dependency, "dependency", None) or getattr(dependency, "call", None)
+            if call is not None:
+                calls.append(call)
+            visit(dependency)
+        visit(getattr(route, "dependant", None))
+        return calls
+
     keyed, open_paths = set(), set()
     for route in create_app().routes:
-        # FastAPI exposes router-level dependencies directly on older releases, but folds
-        # them into ``route.dependant.dependencies`` on newer releases. Inspect both public
-        # representations so this contract test remains valid across the supported range.
-        dependencies = getattr(route, "dependencies", [])
-        calls = [d.dependency for d in dependencies]
-        if not calls:
-            calls = [d.call for d in getattr(getattr(route, "dependant", None), "dependencies", [])]
-        target = keyed if require_api_key in calls else open_paths
+        calls = dependency_calls(route)
+        target = (
+            keyed
+            if any(
+                call is require_api_key or getattr(call, "__name__", None) == "require_api_key"
+                for call in calls
+            )
+            else open_paths
+        )
         target.add(getattr(route, "path", ""))
 
     assert keyed, "expected the ward routes to be guarded"
