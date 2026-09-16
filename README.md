@@ -632,4 +632,4 @@ MIT — see [LICENSE](LICENSE), which also carries the not-a-medical-device noti
 
 ## Author
 
-**Guna Rithvick** — 2026
+**Guna Rithvick**
