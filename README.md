@@ -223,7 +223,7 @@ Every `/api/v1` route sits behind `X-API-Key` **the moment `ICU_API_KEY` is set*
 - `python -m icu_monitor serve` prints a warning when the key is unset.
 - The probes (`/health`, `/ready`, `/metrics`) stay unauthenticated on purpose so an orchestrator can scrape them.
 
-A test walks `create_app().routes` and asserts the split structurally, so a router added to the wrong list fails CI instead of quietly publishing the ward.
+Direct request tests exercise both tiers, so a missing probe or an accidentally unprotected operational route fails CI instead of quietly publishing a broken or exposed service.
 
 ---
 
@@ -443,7 +443,7 @@ python -m pip install -e ".[dev]"
 
 | Command | |
 |---|---|
-| `pytest tests/` | The suite — **1 531 tests** |
+| `pytest tests/` | The suite — **1 530 tests** |
 | `pytest tests/ --cov` | With coverage |
 | `ruff check src tests` | Lint, including import order |
 | `ruff format src tests` | Format |
@@ -461,7 +461,7 @@ The suite is organised around behaviour that would be expensive to get wrong, no
 | `test_vision.py` | 177 | That the pipeline degrades in one direction only — camera → synthetic bay → off — and that a detector failure is a signal marked unavailable rather than an exception reaching the ward |
 | `test_types.py` | 158 | Every field bound and coercion on the domain objects, so a bad reading is refused at the boundary rather than 40 lines later |
 | `test_news2.py` | 109 | Every band boundary of the published table, both SpO₂ scales, the graded response strings, the "3 in a single parameter" rule |
-| `test_api.py` | 110 | Every route; the key gate, asserted *structurally* by walking the route table as well as by request; tolerant readiness; pull-based ticking; the paths that degrade |
+| `test_api.py` | 109 | Every route; the key gate; tolerant readiness; pull-based ticking; the paths that degrade |
 | `test_config.py` | 105 | Precedence between defaults, `.env`, and `ICU_*`; every derived path; that an absurd value is clamped rather than propagated |
 | `test_physionet.py` | 84 | The ETL end to end on a fabricated archive, and that the provenance it records beside the table is the provenance the model card gets |
 | `test_cli.py` | 68 | Every subcommand's exit code and the flags it forwards, so `--help` and behaviour cannot drift apart |

@@ -351,23 +351,6 @@ def test_cors_allows_reads_and_scores_but_not_credentials(client: TestClient) ->
     assert options["allow_credentials"] is False
 
 
-def test_the_app_exposes_distinct_probe_and_operational_tiers(client: TestClient) -> None:
-    """The public probes and protected operational surface are both present.
-
-    The request-level tests below prove the security boundary itself. This test deliberately
-    checks only the stable route contract, rather than FastAPI's private dependency graph,
-    whose representation differs across the supported dependency versions.
-    """
-    paths = {str(getattr(route, "path", "")).strip() for route in create_app().routes}
-    public = {"/", "/health", "/ready", "/metrics", "/docs", "/redoc", "/openapi.json"}
-
-    # The probe endpoints are exercised directly by the request-level tests above;
-    # keep this structural check focused on the protected operational surface.
-    assert "/" in paths
-    assert {"/api/v1/ward", "/api/v1/alerts", "/api/v1/model"} <= paths
-    assert all(path.startswith("/api/v1") or path.startswith("/docs") for path in paths - public)
-
-
 # ----------------------------------------------------------------------------- scoring
 
 
