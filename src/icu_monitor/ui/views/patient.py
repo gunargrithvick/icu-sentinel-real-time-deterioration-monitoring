@@ -254,7 +254,9 @@ def render(snapshot: WardSnapshot) -> None:
 
     ui.chart_panel(
         f"Vital signs · last {len(engine.history(patient_id))} observations",
-        charts.vitals_facets(engine.history(patient_id), spo2_scale=bed.patient.spo2_scale),
+        charts.vitals_facets(
+            engine.history(patient_id), columns=1, spo2_scale=bed.patient.spo2_scale
+        ),
         note="One panel per channel, each on its own scale. The green band is the NEWS2 "
         "zero-score range for that parameter.",
         fallback="No observations recorded yet.",

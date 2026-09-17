@@ -11,25 +11,37 @@
 
 ---
 
-## Live API
+## Live Vercel Deployment
 
-Try the deployed FastAPI service: [ICU Sentinel API](https://icu-patient-risk-monitoring-system.vercel.app/).
+Open the working deployed project: [ICU Sentinel — Vercel deployment](https://icu-patient-risk-monitoring-system.vercel.app/).
 
-The public health, readiness, metrics, and interactive documentation probes are available without credentials. The operational `/api/v1` routes require the deployment's private `X-API-Key`; it is intentionally not published in this repository. The production deployment uses the connected Neon PostgreSQL database and synthetic ward data, so it is suitable for evaluation—not clinical use.
+This public Vercel deployment is the project's hosted FastAPI service. Its health, readiness, metrics, and interactive documentation probes are available without credentials; open [`/docs`](https://icu-patient-risk-monitoring-system.vercel.app/docs) to explore the working service. The operational `/api/v1` routes require the deployment's private `X-API-Key`; it is intentionally not published in this repository. The production deployment uses the connected Neon PostgreSQL database and synthetic ward data, so it is suitable for evaluation—not clinical use.
 
 ## Screenshots
 
-These captures show the current Streamlit dashboard in reproducible local simulator mode (`ICU_FRAME_SOURCE=off`, `ICU_DETECTOR=off`). They use synthetic ward data and are provided for evaluation only.
+These are genuine captures of the current Streamlit dashboard, not mockups. They were taken from the running application at a consistent desktop viewport in reproducible local simulator mode (`ICU_FRAME_SOURCE=off`, `ICU_DETECTOR=off`) with a fixed simulation seed. The five images intentionally cover every dashboard view and use synthetic ward data for evaluation only.
 
 ### Ward overview
 
 ![ICU Sentinel ward overview](docs/screenshots/icu-dashboard-overview.png)
 
+### Patient monitor
+
+![ICU Sentinel patient monitor](docs/screenshots/icu-dashboard-patient-monitor.png)
+
+### Alerts
+
+![ICU Sentinel alerts](docs/screenshots/icu-dashboard-alerts.png)
+
+### Model insights
+
+![ICU Sentinel model insights](docs/screenshots/icu-dashboard-model-insights.png)
+
 ### Settings and readiness
 
 ![ICU Sentinel settings and readiness](docs/screenshots/icu-dashboard-settings.png)
 
-The screenshots are documentation images of the dashboard. The deployed [Vercel API](https://icu-patient-risk-monitoring-system.vercel.app/) is the public hosted service; run the Streamlit dashboard locally, with Docker, or through Streamlit Community Cloud as described in [Quickstart](#quickstart).
+The screenshots are documentation images of the dashboard. The public [Vercel deployment](https://icu-patient-risk-monitoring-system.vercel.app/) is the hosted service; run the Streamlit dashboard locally, with Docker, or through Streamlit Community Cloud as described in [Quickstart](#quickstart).
 
 ## What it does
 

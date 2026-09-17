@@ -313,7 +313,10 @@ def vitals_facets(history: Sequence[Any], *, columns: int = 2, spo2_scale: int =
 
     faceted = (
         alt.layer(band, line, points, data=frame)
-        .properties(width="container", height=118)
+        # A responsive child width inside a multi-column facet makes each child claim the
+        # whole container, pushing the second column off-screen. A bounded width keeps all
+        # channels visible while leaving the surrounding dashboard responsive.
+        .properties(width=600, height=118)
         .facet(
             facet=alt.Facet(
                 "channel:N", title=None, sort=order, header=alt.Header(labelAnchor="start")
