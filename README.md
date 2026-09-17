@@ -2,7 +2,7 @@
 
 **Real-time ICU deterioration monitoring: a published clinical early-warning score, a machine-learning acuity model, and a bedside vision channel, fused into one explainable risk number per bed.**
 
-[![CI](https://github.com/gunargrithvick/icu-sentinel-real-time-icu-deterioration-monitoring/actions/workflows/ci.yml/badge.svg)](https://github.com/gunargrithvick/icu-sentinel-real-time-icu-deterioration-monitoring/actions/workflows/ci.yml)
+[![CI](https://github.com/gunargrithvick/icu-sentinel-real-time-deterioration-monitoring/actions/workflows/ci.yml/badge.svg)](https://github.com/gunargrithvick/icu-sentinel-real-time-deterioration-monitoring/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-1531%20passing-brightgreen.svg)](tests/)

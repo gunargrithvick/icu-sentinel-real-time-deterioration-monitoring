@@ -55,8 +55,8 @@ dev = [
 icu-monitor = "icu_monitor.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/gunargrithvick/icu-sentinel-real-time-icu-deterioration-monitoring"
-Issues = "https://github.com/gunargrithvick/icu-sentinel-real-time-icu-deterioration-monitoring/issues"
+Homepage = "https://github.com/gunargrithvick/icu-sentinel-real-time-deterioration-monitoring"
+Issues = "https://github.com/gunargrithvick/icu-sentinel-real-time-deterioration-monitoring/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
